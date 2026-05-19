@@ -1,12 +1,18 @@
 import OpenAI from "openai";
 
-const client = new OpenAI({
-  apiKey: process.env.DEEPSEEK_API_KEY,
-  baseURL: "https://api.deepseek.com",
-});
-
 export async function POST(req: Request) {
   try {
+    const apiKey = process.env.DEEPSEEK_API_KEY;
+    if (!apiKey) {
+      return Response.json(
+        { success: false, error: "Missing DEEPSEEK_API_KEY" },
+        { status: 500 }
+      );
+    }
+    const client = new OpenAI({
+      apiKey,
+      baseURL: "https://api.deepseek.com",
+    });
     const body = await req.json();
     const { prompt } = body;
 
